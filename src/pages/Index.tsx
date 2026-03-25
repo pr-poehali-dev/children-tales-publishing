@@ -1,7 +1,9 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
-type IconName = "Home" | "LayoutGrid" | "BookOpen" | "Heart" | "User" | "ChevronRight" | "ChevronLeft" | "X" | "ArrowRight" | "Star" | "Settings";
+const STORIES_API = "https://functions.poehali.dev/efc75c63-7ea6-4754-90e6-4709c7cdf936";
+
+type IconName = "Home" | "LayoutGrid" | "BookOpen" | "Heart" | "User" | "ChevronRight" | "ChevronLeft" | "X" | "ArrowRight" | "Star" | "Settings" | "Send" | "Shield" | "Check" | "Loader" | "Pencil";
 
 const FOREST_IMG = "https://cdn.poehali.dev/projects/b1cb1072-b10b-43b8-9d13-e527970cd9e7/files/92a33bb1-8e41-42c2-a23b-d30aa471ef44.jpg";
 const BOOK_IMG = "https://cdn.poehali.dev/projects/b1cb1072-b10b-43b8-9d13-e527970cd9e7/files/cbdbb1bb-6aed-48ac-b302-505b44f2ff49.jpg";
@@ -160,7 +162,7 @@ const STORIES = [
   },
 ];
 
-type Page = "home" | "catalog" | "categories" | "profile" | "library";
+type Page = "home" | "catalog" | "categories" | "profile" | "library" | "submit" | "admin";
 
 export default function Index() {
   const [page, setPage] = useState<Page>("home");
@@ -236,7 +238,9 @@ export default function Index() {
       >
         <button
           onClick={() => { setPage("home"); setSelectedCategory(null); }}
+          onDoubleClick={() => setPage("admin")}
           className="flex items-center gap-2"
+          title="Двойной клик — панель администратора"
         >
           <span className="text-2xl">✨</span>
           <span className="font-fairy text-xl font-semibold text-gold-light hidden sm:block">Сказочный Мир</span>
@@ -247,6 +251,7 @@ export default function Index() {
             { id: "categories" as Page, label: "Категории", icon: "LayoutGrid" },
             { id: "catalog" as Page, label: "Каталог", icon: "BookOpen" },
             { id: "library" as Page, label: "Библиотека", icon: "Heart" },
+            { id: "submit" as Page, label: "Опубликовать", icon: "Pencil" },
             { id: "profile" as Page, label: "Профиль", icon: "User" },
           ].map(item => (
             <button
@@ -556,6 +561,16 @@ export default function Index() {
             </div>
           </div>
         )}
+
+        {/* ФОРМА ПУБЛИКАЦИИ */}
+        {page === "submit" && (
+          <SubmitPage onBack={() => setPage("home")} />
+        )}
+
+        {/* ПАНЕЛЬ АДМИНИСТРАТОРА */}
+        {page === "admin" && (
+          <AdminPage />
+        )}
       </main>
 
       {/* Модальное окно сказки */}
@@ -634,7 +649,8 @@ export default function Index() {
         {[
           { id: "home" as Page, icon: "Home", label: "Главная" },
           { id: "catalog" as Page, icon: "BookOpen", label: "Каталог" },
-          { id: "library" as Page, icon: "Heart", label: "Библиотека" },
+          { id: "submit" as Page, icon: "Pencil", label: "Написать" },
+          { id: "library" as Page, icon: "Heart", label: "Моё" },
           { id: "profile" as Page, icon: "User", label: "Профиль" },
         ].map(item => (
           <button
@@ -650,6 +666,306 @@ export default function Index() {
       </div>
 
       <div className="h-20 md:hidden" />
+    </div>
+  );
+}
+
+// ─── Форма публикации ──────────────────────────────────────────
+function SubmitPage({ onBack }: { onBack: () => void }) {
+  const [form, setForm] = useState({
+    title: "", author_name: "", author_email: "",
+    category: "", age_range: "", read_time: "", emoji: "📖", story_text: "",
+  });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [error, setError] = useState("");
+
+  const set = (field: string, value: string) => setForm(f => ({ ...f, [field]: value }));
+
+  const submit = async () => {
+    if (!form.title || !form.author_name || !form.author_email || !form.category || !form.story_text) {
+      setError("Заполните все обязательные поля"); return;
+    }
+    setStatus("loading"); setError("");
+    try {
+      const res = await fetch(STORIES_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error();
+      setStatus("success");
+    } catch {
+      setStatus("error"); setError("Ошибка отправки. Попробуйте ещё раз.");
+    }
+  };
+
+  const inputStyle = {
+    background: "hsla(230,30%,13%,1)",
+    border: "1px solid hsla(45,85%,58%,0.15)",
+    borderRadius: "0.75rem",
+    color: "hsl(45,80%,88%)",
+    padding: "0.65rem 1rem",
+    width: "100%",
+    fontFamily: "'Golos Text', sans-serif",
+    fontSize: "0.95rem",
+    outline: "none",
+  };
+
+  if (status === "success") {
+    return (
+      <div className="max-w-xl mx-auto px-6 py-20 text-center animate-fade-in">
+        <div className="text-6xl mb-4 animate-float">🌟</div>
+        <h2 className="font-fairy text-3xl font-bold mb-3" style={{ color: "hsl(48,90%,78%)" }}>Сказка отправлена!</h2>
+        <p className="mb-8" style={{ color: "hsl(240,20%,55%)" }}>Мы проверим её и опубликуем в каталоге в ближайшее время.</p>
+        <button onClick={onBack} className="btn-fairy px-8 py-3 rounded-full font-semibold">На главную</button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-2xl mx-auto px-6 py-12 animate-fade-in">
+      <div className="mb-8">
+        <h1 className="font-fairy text-4xl font-bold mb-2" style={{ color: "hsl(48,90%,78%)" }}>✍️ Опубликовать сказку</h1>
+        <p className="text-sm" style={{ color: "hsl(240,20%,55%)" }}>Расскажите свою историю — мы проверим и добавим в каталог</p>
+      </div>
+
+      <div className="space-y-4">
+        {/* Об авторе */}
+        <div className="card-fairy rounded-2xl p-5 space-y-3">
+          <h3 className="font-fairy text-lg" style={{ color: "hsl(48,90%,72%)" }}>👤 Об авторе</h3>
+          <input style={inputStyle} placeholder="Ваше имя *" value={form.author_name} onChange={e => set("author_name", e.target.value)} />
+          <input style={inputStyle} placeholder="Email для связи *" type="email" value={form.author_email} onChange={e => set("author_email", e.target.value)} />
+        </div>
+
+        {/* О сказке */}
+        <div className="card-fairy rounded-2xl p-5 space-y-3">
+          <h3 className="font-fairy text-lg" style={{ color: "hsl(48,90%,72%)" }}>📖 О сказке</h3>
+          <div className="flex gap-2">
+            <input style={{ ...inputStyle, flex: 1 }} placeholder="Название сказки *" value={form.title} onChange={e => set("title", e.target.value)} />
+            <input style={{ ...inputStyle, width: "70px", textAlign: "center", fontSize: "1.5rem" }} placeholder="📖" value={form.emoji} onChange={e => set("emoji", e.target.value)} maxLength={2} />
+          </div>
+          <select style={{ ...inputStyle, cursor: "pointer" }} value={form.category} onChange={e => set("category", e.target.value)}>
+            <option value="">Категория *</option>
+            {CATEGORIES.map(c => <option key={c.name} value={c.name}>{c.icon} {c.name}</option>)}
+          </select>
+          <div className="flex gap-2">
+            <select style={{ ...inputStyle, cursor: "pointer" }} value={form.age_range} onChange={e => set("age_range", e.target.value)}>
+              <option value="">Возраст</option>
+              {["3–5 лет", "4–7 лет", "5–8 лет", "6–9 лет", "7–10 лет", "8–12 лет"].map(a => <option key={a}>{a}</option>)}
+            </select>
+            <select style={{ ...inputStyle, cursor: "pointer" }} value={form.read_time} onChange={e => set("read_time", e.target.value)}>
+              <option value="">Время чтения</option>
+              {["5 мин", "10 мин", "15 мин", "20 мин", "25 мин", "30 мин"].map(t => <option key={t}>{t}</option>)}
+            </select>
+          </div>
+        </div>
+
+        {/* Текст */}
+        <div className="card-fairy rounded-2xl p-5">
+          <h3 className="font-fairy text-lg mb-3" style={{ color: "hsl(48,90%,72%)" }}>✨ Текст сказки *</h3>
+          <textarea
+            style={{ ...inputStyle, minHeight: "220px", resize: "vertical" }}
+            placeholder="Жил-был... Напишите вашу сказку здесь. Каждый абзац — отдельная строка."
+            value={form.story_text}
+            onChange={e => set("story_text", e.target.value)}
+          />
+          <p className="text-xs mt-2" style={{ color: "hsl(240,20%,45%)" }}>{form.story_text.length} символов</p>
+        </div>
+
+        {error && <p className="text-sm text-center" style={{ color: "hsl(0,70%,60%)" }}>{error}</p>}
+
+        <button
+          onClick={submit}
+          disabled={status === "loading"}
+          className="btn-fairy w-full py-3.5 rounded-2xl text-base font-semibold flex items-center justify-center gap-2"
+          style={{ opacity: status === "loading" ? 0.7 : 1 }}
+        >
+          {status === "loading"
+            ? <><Icon name="Loader" size={18} /> Отправляем...</>
+            : <><Icon name="Send" size={18} /> Отправить на проверку</>}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Панель администратора ──────────────────────────────────────
+type Submission = {
+  id: number; title: string; author_name: string; author_email: string;
+  category: string; age_range: string; read_time: string;
+  story_text: string; emoji: string; status: string;
+  admin_comment: string | null; created_at: string;
+};
+
+function AdminPage() {
+  const [authed, setAuthed] = useState(false);
+  const [password, setPassword] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [tab, setTab] = useState<"pending" | "approved" | "rejected">("pending");
+  const [selected, setSelected] = useState<Submission | null>(null);
+  const [comment, setComment] = useState("");
+  const [actionLoading, setActionLoading] = useState(false);
+
+  const login = async () => {
+    setLoading(true); setAuthError("");
+    try {
+      const res = await fetch(`${STORIES_API}?admin=1&status=pending`, {
+        headers: { "X-Admin-Token": password },
+      });
+      if (res.status === 403) { setAuthError("Неверный пароль"); setLoading(false); return; }
+      const data = await res.json();
+      setSubmissions(typeof data === "string" ? JSON.parse(data) : data);
+      setAuthed(true);
+    } catch { setAuthError("Ошибка подключения"); }
+    setLoading(false);
+  };
+
+  const loadTab = async (t: typeof tab) => {
+    setTab(t); setSelected(null); setLoading(true);
+    const res = await fetch(`${STORIES_API}?admin=1&status=${t}`, {
+      headers: { "X-Admin-Token": password },
+    });
+    const data = await res.json();
+    setSubmissions(typeof data === "string" ? JSON.parse(data) : data);
+    setLoading(false);
+  };
+
+  const decide = async (action: "approved" | "rejected") => {
+    if (!selected) return;
+    setActionLoading(true);
+    await fetch(`${STORIES_API}?id=${selected.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "X-Admin-Token": password },
+      body: JSON.stringify({ status: action, admin_comment: comment }),
+    });
+    setSelected(null); setComment("");
+    await loadTab(tab);
+    setActionLoading(false);
+  };
+
+  if (!authed) {
+    return (
+      <div className="max-w-sm mx-auto px-6 py-20 animate-fade-in">
+        <div className="text-center mb-8">
+          <div className="text-5xl mb-3">🛡️</div>
+          <h1 className="font-fairy text-3xl font-bold mb-1" style={{ color: "hsl(48,90%,78%)" }}>Панель администратора</h1>
+          <p className="text-sm" style={{ color: "hsl(240,20%,50%)" }}>Введите пароль для входа</p>
+        </div>
+        <div className="card-fairy rounded-2xl p-6 space-y-3">
+          <input
+            type="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            onKeyDown={e => e.key === "Enter" && login()}
+            style={{ background: "hsla(230,30%,13%,1)", border: "1px solid hsla(45,85%,58%,0.15)", borderRadius: "0.75rem", color: "hsl(45,80%,88%)", padding: "0.65rem 1rem", width: "100%", fontFamily: "'Golos Text', sans-serif", outline: "none" }}
+          />
+          {authError && <p className="text-sm text-center" style={{ color: "hsl(0,70%,60%)" }}>{authError}</p>}
+          <button onClick={login} disabled={loading} className="btn-fairy w-full py-3 rounded-xl font-semibold flex items-center justify-center gap-2">
+            <Icon name="Shield" size={16} /> {loading ? "Проверяем..." : "Войти"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-10 animate-fade-in">
+      <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <h1 className="font-fairy text-3xl font-bold" style={{ color: "hsl(48,90%,78%)" }}>🛡️ Модерация</h1>
+        <div className="flex gap-2">
+          {(["pending", "approved", "rejected"] as const).map(t => (
+            <button key={t} onClick={() => loadTab(t)}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${tab === t ? "btn-fairy" : "border hover:bg-white/5"}`}
+              style={tab !== t ? { borderColor: "hsla(45,85%,58%,0.2)", color: "hsl(240,20%,60%)" } : {}}>
+              {t === "pending" ? "⏳ Ожидают" : t === "approved" ? "✅ Одобрены" : "❌ Отклонены"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {loading ? (
+        <div className="text-center py-16" style={{ color: "hsl(240,20%,50%)" }}>Загружаем...</div>
+      ) : submissions.length === 0 ? (
+        <div className="text-center py-16">
+          <div className="text-4xl mb-3">📭</div>
+          <p className="font-fairy text-xl" style={{ color: "hsl(48,90%,65%)" }}>Заявок нет</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {submissions.map(s => (
+            <div key={s.id} className="card-fairy rounded-2xl p-5 cursor-pointer" onClick={() => { setSelected(s); setComment(""); }}>
+              <div className="flex items-start justify-between mb-2">
+                <div>
+                  <span className="text-xl mr-2">{s.emoji}</span>
+                  <span className="font-fairy text-lg font-semibold" style={{ color: "hsl(48,90%,78%)" }}>{s.title}</span>
+                </div>
+                <span className="text-xs px-2 py-0.5 rounded-full" style={{ background: "hsla(45,85%,58%,0.1)", color: "hsl(45,80%,68%)" }}>{s.category}</span>
+              </div>
+              <p className="text-xs mb-2" style={{ color: "hsl(240,20%,50%)" }}>{s.author_name} · {s.author_email}</p>
+              <p className="text-sm line-clamp-2" style={{ color: "hsl(240,20%,60%)" }}>{s.story_text.slice(0, 120)}...</p>
+              <div className="flex items-center justify-between mt-3">
+                <span className="text-xs" style={{ color: "hsl(240,20%,40%)" }}>{new Date(s.created_at).toLocaleDateString("ru")}</span>
+                {tab === "pending" && <span className="text-xs" style={{ color: "hsl(45,85%,58%)" }}>Нажмите для проверки →</span>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Детальный просмотр */}
+      {selected && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{ background: "rgba(10,10,20,0.9)", backdropFilter: "blur(8px)" }}
+          onClick={() => setSelected(null)}>
+          <div className="relative max-w-2xl w-full rounded-3xl overflow-hidden animate-slide-up max-h-[90vh] flex flex-col"
+            style={{ background: "hsl(230,30%,11%)", border: "1px solid hsla(45,85%,58%,0.25)" }}
+            onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between p-5 border-b" style={{ borderColor: "hsla(240,20%,18%,1)" }}>
+              <h2 className="font-fairy text-xl font-semibold" style={{ color: "hsl(48,90%,78%)" }}>
+                {selected.emoji} {selected.title}
+              </h2>
+              <button onClick={() => setSelected(null)} className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/10">
+                <Icon name="X" size={16} style={{ color: "hsl(240,20%,60%)" }} />
+              </button>
+            </div>
+            <div className="overflow-y-auto p-5 flex-1 space-y-3">
+              <div className="flex gap-2 flex-wrap">
+                {[selected.category, selected.age_range, selected.read_time].filter(Boolean).map(t => (
+                  <span key={t} className="text-xs px-2 py-0.5 rounded-full" style={{ background: "hsla(45,85%,58%,0.1)", color: "hsl(45,80%,72%)" }}>{t}</span>
+                ))}
+              </div>
+              <p className="text-xs" style={{ color: "hsl(240,20%,50%)" }}>Автор: <span style={{ color: "hsl(45,80%,75%)" }}>{selected.author_name}</span> · {selected.author_email}</p>
+              <div className="rounded-xl p-4 text-sm leading-relaxed whitespace-pre-wrap" style={{ background: "hsla(230,30%,8%,1)", color: "hsl(240,20%,70%)" }}>
+                {selected.story_text}
+              </div>
+              {tab === "pending" && (
+                <textarea
+                  placeholder="Комментарий администратора (необязательно)"
+                  value={comment}
+                  onChange={e => setComment(e.target.value)}
+                  style={{ background: "hsla(230,30%,13%,1)", border: "1px solid hsla(45,85%,58%,0.15)", borderRadius: "0.75rem", color: "hsl(45,80%,88%)", padding: "0.65rem 1rem", width: "100%", fontFamily: "'Golos Text', sans-serif", minHeight: "70px", resize: "none", outline: "none" }}
+                />
+              )}
+            </div>
+            {tab === "pending" && (
+              <div className="flex gap-3 p-5 border-t" style={{ borderColor: "hsla(240,20%,18%,1)" }}>
+                <button onClick={() => decide("rejected")} disabled={actionLoading}
+                  className="flex-1 py-2.5 rounded-xl font-semibold text-sm border transition-all hover:bg-red-900/20"
+                  style={{ borderColor: "hsla(0,70%,50%,0.3)", color: "hsl(0,70%,65%)" }}>
+                  ❌ Отклонить
+                </button>
+                <button onClick={() => decide("approved")} disabled={actionLoading}
+                  className="flex-1 btn-fairy py-2.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2">
+                  <Icon name="Check" size={15} /> Одобрить
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

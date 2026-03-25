@@ -1,0 +1,26 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "POST submit story",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "title": "Тестовая сказка",
+        "author_name": "Иван Тестов",
+        "author_email": "test@example.com",
+        "category": "Феи и эльфы",
+        "age_range": "5–8 лет",
+        "read_time": "10 мин",
+        "story_text": "Жил-был маленький эльф в волшебном лесу...",
+        "emoji": "🧚"
+      },
+      "expectedStatus": 201
+    }
+  ]
+}
