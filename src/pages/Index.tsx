@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
-type IconName = "Home" | "LayoutGrid" | "BookOpen" | "Heart" | "User" | "ChevronRight" | "X" | "ArrowRight" | "Star" | "Settings";
+type IconName = "Home" | "LayoutGrid" | "BookOpen" | "Heart" | "User" | "ChevronRight" | "ChevronLeft" | "X" | "ArrowRight" | "Star" | "Settings";
 
 const FOREST_IMG = "https://cdn.poehali.dev/projects/b1cb1072-b10b-43b8-9d13-e527970cd9e7/files/92a33bb1-8e41-42c2-a23b-d30aa471ef44.jpg";
 const BOOK_IMG = "https://cdn.poehali.dev/projects/b1cb1072-b10b-43b8-9d13-e527970cd9e7/files/cbdbb1bb-6aed-48ac-b302-505b44f2ff49.jpg";
@@ -27,6 +27,19 @@ const STORIES = [
     img: FOREST_IMG,
     rating: 4.9,
     emoji: "🌙",
+    text: [
+      "В самой глубине старого леса, где деревья были такими высокими, что их верхушки касались облаков, жила маленькая фея по имени Лира. Её крылья переливались серебром при лунном свете, а в руках она всегда держала крохотный фонарик из светлячков.",
+      "Однажды ночью Лира заметила, что лунный свет, который обычно заливал поляну серебром, куда-то пропал. Лес погрузился в темноту, и все лесные жители испугались.",
+      "— Что случилось с луной? — пискнул маленький ёжик, свернувшись в клубок под кустом бузины.",
+      "— Не бойся, — сказала Лира и подняла свой фонарик повыше. — Я найду ответ.",
+      "Она полетела выше и выше, минуя верхушки елей и берёз, пока не добралась до самого края леса, где начиналось ночное небо. И там она увидела его — огромное грустное облако, которое легло прямо на луну и закрыло её от мира.",
+      "— Почему ты плачешь? — спросила Лира облако.",
+      "— Меня никто не замечает, — вздохнуло облако, и с него упало несколько тяжёлых капель дождя. — Все смотрят только на луну и звёзды, а я просто плыву один.",
+      "Лира задумалась. Потом она достала из своей сумочки горсть лунной пыли — той самой, которую феи собирают на рассвете — и рассыпала её прямо в облако.",
+      "Облако засветилось изнутри мягким розовым светом. Оно было таким красивым, что все звёзды вокруг ахнули от восхищения.",
+      "— Теперь тебя видят все, — улыбнулась Лира.",
+      "Облако медленно поплыло в сторону, освобождая луну. А лесная поляна снова наполнилась серебряным светом. И с тех пор, когда на небе появляются светящиеся облака, лесные жители знают: это Лира подарила кому-то немного своего волшебства.",
+    ],
   },
   {
     id: 2,
@@ -38,6 +51,16 @@ const STORIES = [
     img: BOOK_IMG,
     rating: 4.7,
     emoji: "📖",
+    text: [
+      "В башне старого замка на самой высокой полке пылилась книга. Не простая книга — в её кожаной обложке были спрятаны все заклинания мира. Но никто не мог её открыть, потому что замок на ней требовал не ключа, а правильного слова.",
+      "Многие волшебники приходили и пробовали. Они произносили мудрёные слова на древних языках, рисовали магические знаки, варили зелья. Книга молчала.",
+      "Однажды в замок забрела девочка по имени Маша. Она не была волшебницей — просто заблудилась во время прогулки. Увидев книгу, она взяла её в руки и сказала то, что говорят всем незнакомцам:",
+      "— Здравствуй.",
+      "Замок щёлкнул. Страницы сами собой распахнулись.",
+      "Маша от удивления чуть не выронила книгу. На первой странице золотыми буквами было написано: «Самое сильное заклинание — это вежливость. Тот, кто это знает, достоин всех остальных».",
+      "Маша читала всю ночь. Она узнала, как заставить дождь прекратиться, как найти потерянные вещи и как помочь грустному другу улыбнуться. Но самое полезное заклинание было в самом конце книги: «Слушай других внимательно — и ты поймёшь их без слов».",
+      "Утром Маша положила книгу обратно на полку. Замок снова закрылся. Но она уже знала главное — и унесла это знание с собой домой.",
+    ],
   },
   {
     id: 3,
@@ -49,6 +72,19 @@ const STORIES = [
     img: DRAGON_IMG,
     rating: 4.8,
     emoji: "🐉",
+    text: [
+      "Все драконы умели дышать огнём. Все, кроме Сола. Вместо огня у него вырывались маленькие мыльные пузыри — переливающиеся, радужные, невесомые. Другие драконы смеялись над ним.",
+      "— Какой же ты дракон! — фыркал Горн, выпуская клуб оранжевого пламени. — Ты больше похож на мыльницу!",
+      "Сол опускал голову и уходил в свою пещеру. Там он смотрел на свои пузыри и думал, что никогда не будет настоящим драконом.",
+      "Но однажды в долину пришла беда. Лесной пожар — огромный, жадный, рычащий — пополз к деревне. Все драконы в ужасе улетели: их огонь только раздувал пламя сильнее.",
+      "Только Сол остался.",
+      "Он набрал побольше воздуха и выдохнул. Из его пасти вылетели тысячи пузырей — огромных, как воздушные шары. Они накрывали языки огня и лопались, выпуская влажный воздух. Пожар зашипел, засмолился и начал гаснуть.",
+      "Жители деревни смотрели, как Сол кружит над огнём, выдыхая всё новые пузыри. К утру пожар был потушен.",
+      "— Ты спас нас! — кричали люди.",
+      "Горн прилетел последним. Он долго молчал, глядя на Сола.",
+      "— Прости меня, — сказал он наконец. — Я не знал, что твой огонь сильнее моего.",
+      "Сол улыбнулся и выдул маленький радужный пузырь. Тот поднялся высоко в небо и лопнул, рассыпав искры всех цветов радуги.",
+    ],
   },
   {
     id: 4,
@@ -60,6 +96,18 @@ const STORIES = [
     img: FOREST_IMG,
     rating: 4.6,
     emoji: "⭐",
+    text: [
+      "На дне тёплого моря жила русалочка Кора. Каждую ночь она всплывала на поверхность и смотрела на звёзды, отражавшиеся в воде. Одна звёздочка горела ярче всех — маленькая, голубая, мигающая.",
+      "— Я хочу с тобой познакомиться, — говорила Кора, но звезда была слишком далеко.",
+      "Однажды во время шторма звёздочка упала в море. Кора нашла её на морском дне — она лежала среди кораллов, тускло мерцая.",
+      "— Тебе больно? — спросила Кора.",
+      "— Мне холодно и одиноко, — прошептала звёздочка. — Я хочу домой, на небо.",
+      "Кора думала недолго. Она собрала самых быстрых рыбок, самых сильных морских коньков и попросила их помочь. Они подняли звёздочку со дна и передавали её из рук в руки — всё выше и выше, до самой поверхности.",
+      "Там Кора подбросила звёздочку в ночное небо со всей силой своего хвоста.",
+      "Звёздочка взлетела — и вспыхнула ярче, чем когда-либо.",
+      "— Спасибо! — донеслось сверху.",
+      "С тех пор та звёздочка светит чуть ярче других. Моряки говорят, что она показывает дорогу домой. А Кора каждую ночь машет ей рукой со дна моря.",
+    ],
   },
   {
     id: 5,
@@ -71,6 +119,19 @@ const STORIES = [
     img: BOOK_IMG,
     rating: 4.9,
     emoji: "🦊",
+    text: [
+      "Рыжая лиса Веда умела делать одно волшебство — она умела находить потерянные вещи. Стоило ей покрутить пушистым хвостом три раза, как пропавшая вещь сама приходила к хозяину.",
+      "Зайчонок Тима потерял любимую морковку. Он искал её повсюду — в норке, под кустами, у речки. Ничего.",
+      "— Веда, помоги! — попросил он.",
+      "Лиса покрутила хвостом раз, другой, третий. Ничего не произошло.",
+      "— Странно, — нахмурилась Веда. — Обычно всегда работает.",
+      "Она подумала и спросила: — А ты точно её потерял? Может, просто забыл, куда положил?",
+      "Тима задумался. Потом вспомнил: — Ой! Я же сам её спрятал под большим камнем, чтобы никто не взял!",
+      "Они пошли к камню — и конечно, морковка была там. Целая и невредимая.",
+      "— Моё волшебство не работает на вещи, которые не потеряны, — засмеялась Веда. — Оно работает только на настоящие потери.",
+      "— А как мне научиться не терять вещи? — спросил Тима.",
+      "— Просто запоминай, куда кладёшь, — улыбнулась лиса и махнула хвостом. — Это самое лучшее волшебство.",
+    ],
   },
   {
     id: 6,
@@ -82,6 +143,20 @@ const STORIES = [
     img: DRAGON_IMG,
     rating: 4.5,
     emoji: "🌟",
+    text: [
+      "Каждую ночь, когда все засыпали, мальчик Никита забирался на чердак и смотрел в телескоп. Он изучал звёзды так долго, что знал имя каждой из них.",
+      "Однажды он заметил: одна звезда пропала. Маленькая, почти незаметная — но он помнил, что она всегда была между Большой Медведицей и созвездием Лиры.",
+      "Никита записал в блокнот: «Звезда 7-Л исчезла. Ищу причину».",
+      "Ночь за ночью он наблюдал. На третью ночь звезда появилась снова — но не на своём месте. Она медленно двигалась по небу.",
+      "— Это не звезда, — прошептал Никита, приникнув к окуляру. — Это что-то живое.",
+      "Существо — маленькое, светящееся, похожее на морского конька из света — кружило над городом. Оно, кажется, заблудилось.",
+      "Никита вышел во двор и направил фонарик в небо — три вспышки, пауза, три вспышки. Сигнал, который он читал в книге о морзянке.",
+      "Существо остановилось. Потом начало мигать в ответ: один-два-три, один-два-три.",
+      "Они разговаривали так всю ночь — фонариком и звёздным светом. К рассвету Никита понял: существо ищет свою стаю, которая улетела к другому созвездию.",
+      "Он навёл телескоп и нашёл их — целое облако таких же светящихся существ у края Млечного пути. Три вспышки в их сторону.",
+      "Существо радостно мигнуло и умчалось.",
+      "Никита смотрел ему вслед, пока рассвет не погасил звёзды. В блокноте он написал: «Звезда 7-Л найдена. Задание выполнено. Жду следующей ночи».",
+    ],
   },
 ];
 
@@ -92,6 +167,7 @@ export default function Index() {
   const [favorites, setFavorites] = useState<number[]>([1]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [activeStory, setActiveStory] = useState<typeof STORIES[0] | null>(null);
+  const [readingStory, setReadingStory] = useState<typeof STORIES[0] | null>(null);
 
   const toggleFavorite = (id: number) => {
     setFavorites(prev =>
@@ -104,6 +180,22 @@ export default function Index() {
     : STORIES;
 
   const favoriteStories = STORIES.filter(s => favorites.includes(s.id));
+
+  const openReading = (story: typeof STORIES[0]) => {
+    setActiveStory(null);
+    setReadingStory(story);
+  };
+
+  if (readingStory) {
+    return (
+      <ReadingPage
+        story={readingStory}
+        isFav={favorites.includes(readingStory.id)}
+        onFav={toggleFavorite}
+        onBack={() => setReadingStory(null)}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen" style={{ background: "hsl(230, 35%, 7%)" }}>
@@ -237,7 +329,7 @@ export default function Index() {
                     story={story}
                     isFav={favorites.includes(story.id)}
                     onFav={toggleFavorite}
-                    onRead={() => setActiveStory(story)}
+                    onRead={() => openReading(story)}
                     delay={i * 0.1}
                   />
                 ))}
@@ -343,7 +435,7 @@ export default function Index() {
                   story={story}
                   isFav={favorites.includes(story.id)}
                   onFav={toggleFavorite}
-                  onRead={() => setActiveStory(story)}
+                  onRead={() => openReading(story)}
                   delay={i * 0.07}
                 />
               ))}
@@ -382,7 +474,7 @@ export default function Index() {
                     story={story}
                     isFav={true}
                     onFav={toggleFavorite}
-                    onRead={() => setActiveStory(story)}
+                    onRead={() => openReading(story)}
                     delay={i * 0.1}
                   />
                 ))}
@@ -522,7 +614,7 @@ export default function Index() {
                   </span>
                 ))}
               </div>
-              <button className="btn-fairy w-full py-3 rounded-2xl text-base font-semibold">
+              <button onClick={() => openReading(activeStory)} className="btn-fairy w-full py-3 rounded-2xl text-base font-semibold">
                 Начать читать
               </button>
             </div>
@@ -558,6 +650,127 @@ export default function Index() {
       </div>
 
       <div className="h-20 md:hidden" />
+    </div>
+  );
+}
+
+function ReadingPage({
+  story,
+  isFav,
+  onFav,
+  onBack,
+}: {
+  story: typeof STORIES[0];
+  isFav: boolean;
+  onFav: (id: number) => void;
+  onBack: () => void;
+}) {
+  return (
+    <div className="min-h-screen" style={{ background: "hsl(230, 35%, 7%)" }}>
+      {/* Звёзды */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {[...Array(20)].map((_, i) => (
+          <div key={i} className="absolute rounded-full bg-white animate-twinkle"
+            style={{ width: "1px", height: "1px", left: `${(i * 53) % 100}%`, top: `${(i * 31) % 100}%`, animationDelay: `${(i * 0.4) % 3}s`, opacity: 0.25 + (i % 4) * 0.08 }} />
+        ))}
+      </div>
+
+      {/* Хедер */}
+      <div
+        className="sticky top-0 z-40 flex items-center justify-between px-6 py-4"
+        style={{ background: "hsla(230,35%,5%,0.9)", borderBottom: "1px solid hsla(45,85%,58%,0.12)", backdropFilter: "blur(12px)" }}
+      >
+        <button onClick={onBack} className="flex items-center gap-2 nav-link transition-all hover:gap-3">
+          <Icon name="ChevronLeft" size={20} />
+          <span className="text-sm">Назад</span>
+        </button>
+        <span className="font-fairy text-base hidden sm:block" style={{ color: "hsl(48,90%,72%)" }}>
+          {story.emoji} {story.title}
+        </span>
+        <button
+          onClick={() => onFav(story.id)}
+          className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+          style={{ background: isFav ? "hsla(45,85%,58%,0.2)" : "hsla(240,20%,18%,1)" }}
+        >
+          <Icon name="Heart" size={17}
+            style={{ color: isFav ? "hsl(45,85%,58%)" : "hsl(240,20%,55%)", fill: isFav ? "hsl(45,85%,58%)" : "none" }} />
+        </button>
+      </div>
+
+      {/* Обложка */}
+      <div className="relative h-64 sm:h-80 overflow-hidden">
+        <img src={story.img} alt={story.title} className="w-full h-full object-cover" />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 30%, hsl(230,35%,7%) 100%)" }} />
+        <div className="absolute bottom-6 left-6 right-6">
+          <div className="flex gap-2 mb-3 flex-wrap">
+            {[story.category, story.age, `⏱ ${story.readTime}`, `⭐ ${story.rating}`].map(tag => (
+              <span key={tag} className="text-xs px-3 py-1 rounded-full"
+                style={{ background: "hsla(45,85%,58%,0.15)", color: "hsl(45,80%,78%)" }}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Текст */}
+      <div className="max-w-2xl mx-auto px-6 pb-20">
+        <div className="mb-8 pt-2">
+          <h1 className="font-fairy text-3xl sm:text-4xl font-bold mb-2 leading-tight" style={{ color: "hsl(48,90%,78%)" }}>
+            {story.emoji} {story.title}
+          </h1>
+          <p className="text-sm" style={{ color: "hsl(240,20%,50%)" }}>{story.author}</p>
+        </div>
+
+        <div className="magic-divider mb-8" />
+
+        <div className="space-y-5">
+          {story.text.map((paragraph, i) => (
+            <p
+              key={i}
+              className="animate-fade-in leading-relaxed"
+              style={{
+                color: "hsl(240,20%,75%)",
+                fontSize: "1.05rem",
+                fontFamily: "'Golos Text', sans-serif",
+                animationDelay: `${i * 0.05}s`,
+                animationFillMode: "backwards",
+                ...(paragraph.startsWith("—") ? { paddingLeft: "1rem", color: "hsl(45,70%,72%)", fontStyle: "italic" } : {}),
+              }}
+            >
+              {i === 0 ? (
+                <>
+                  <span className="font-fairy float-left text-6xl leading-none mr-2 mt-1" style={{ color: "hsl(45,85%,58%)" }}>
+                    {paragraph[0]}
+                  </span>
+                  {paragraph.slice(1)}
+                </>
+              ) : paragraph}
+            </p>
+          ))}
+        </div>
+
+        <div className="magic-divider my-10" />
+
+        {/* Конец сказки */}
+        <div className="text-center py-6">
+          <div className="text-4xl mb-3 animate-float">✨</div>
+          <p className="font-fairy text-xl italic mb-6" style={{ color: "hsl(48,90%,65%)" }}>Конец сказки</p>
+          <div className="flex gap-3 justify-center flex-wrap">
+            <button onClick={onBack} className="btn-fairy px-6 py-2.5 rounded-full font-semibold flex items-center gap-2">
+              <Icon name="BookOpen" size={16} /> Другие сказки
+            </button>
+            <button
+              onClick={() => onFav(story.id)}
+              className="px-6 py-2.5 rounded-full font-semibold flex items-center gap-2 border transition-all hover:bg-white/5"
+              style={{ borderColor: "hsla(45,85%,58%,0.3)", color: isFav ? "hsl(45,85%,58%)" : "hsl(240,20%,60%)" }}
+            >
+              <Icon name="Heart" size={16} style={{ fill: isFav ? "hsl(45,85%,58%)" : "none", color: isFav ? "hsl(45,85%,58%)" : "hsl(240,20%,60%)" }} />
+              {isFav ? "В библиотеке" : "Сохранить"}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
