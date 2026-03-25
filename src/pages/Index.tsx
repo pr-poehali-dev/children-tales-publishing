@@ -665,8 +665,17 @@ function ReadingPage({
   onFav: (id: number) => void;
   onBack: () => void;
 }) {
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const el = e.currentTarget;
+    const scrolled = el.scrollTop;
+    const total = el.scrollHeight - el.clientHeight;
+    setScrollProgress(total > 0 ? Math.min(100, Math.round((scrolled / total) * 100)) : 0);
+  };
+
   return (
-    <div className="min-h-screen" style={{ background: "hsl(230, 35%, 7%)" }}>
+    <div className="min-h-screen flex flex-col" style={{ background: "hsl(230, 35%, 7%)", height: "100dvh" }}>
       {/* Звёзды */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         {[...Array(20)].map((_, i) => (
@@ -677,44 +686,72 @@ function ReadingPage({
 
       {/* Хедер */}
       <div
-        className="sticky top-0 z-40 flex items-center justify-between px-6 py-4"
-        style={{ background: "hsla(230,35%,5%,0.9)", borderBottom: "1px solid hsla(45,85%,58%,0.12)", backdropFilter: "blur(12px)" }}
+        className="flex-shrink-0 z-40 flex flex-col"
+        style={{ background: "hsla(230,35%,5%,0.95)", borderBottom: "1px solid hsla(45,85%,58%,0.12)", backdropFilter: "blur(12px)" }}
       >
-        <button onClick={onBack} className="flex items-center gap-2 nav-link transition-all hover:gap-3">
-          <Icon name="ChevronLeft" size={20} />
-          <span className="text-sm">Назад</span>
-        </button>
-        <span className="font-fairy text-base hidden sm:block" style={{ color: "hsl(48,90%,72%)" }}>
-          {story.emoji} {story.title}
-        </span>
-        <button
-          onClick={() => onFav(story.id)}
-          className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
-          style={{ background: isFav ? "hsla(45,85%,58%,0.2)" : "hsla(240,20%,18%,1)" }}
-        >
-          <Icon name="Heart" size={17}
-            style={{ color: isFav ? "hsl(45,85%,58%)" : "hsl(240,20%,55%)", fill: isFav ? "hsl(45,85%,58%)" : "none" }} />
-        </button>
-      </div>
+        <div className="flex items-center justify-between px-6 py-4">
+          <button onClick={onBack} className="flex items-center gap-2 nav-link transition-all hover:gap-3">
+            <Icon name="ChevronLeft" size={20} />
+            <span className="text-sm">Назад</span>
+          </button>
+          <span className="font-fairy text-base hidden sm:block" style={{ color: "hsl(48,90%,72%)" }}>
+            {story.emoji} {story.title}
+          </span>
+          <button
+            onClick={() => onFav(story.id)}
+            className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110"
+            style={{ background: isFav ? "hsla(45,85%,58%,0.2)" : "hsla(240,20%,18%,1)" }}
+          >
+            <Icon name="Heart" size={17}
+              style={{ color: isFav ? "hsl(45,85%,58%)" : "hsl(240,20%,55%)", fill: isFav ? "hsl(45,85%,58%)" : "none" }} />
+          </button>
+        </div>
 
-      {/* Обложка */}
-      <div className="relative h-64 sm:h-80 overflow-hidden">
-        <img src={story.img} alt={story.title} className="w-full h-full object-cover" />
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 30%, hsl(230,35%,7%) 100%)" }} />
-        <div className="absolute bottom-6 left-6 right-6">
-          <div className="flex gap-2 mb-3 flex-wrap">
-            {[story.category, story.age, `⏱ ${story.readTime}`, `⭐ ${story.rating}`].map(tag => (
-              <span key={tag} className="text-xs px-3 py-1 rounded-full"
-                style={{ background: "hsla(45,85%,58%,0.15)", color: "hsl(45,80%,78%)" }}>
-                {tag}
-              </span>
-            ))}
-          </div>
+        {/* Прогресс-бар */}
+        <div className="relative h-1 w-full" style={{ background: "hsla(240,20%,18%,1)" }}>
+          <div
+            className="absolute left-0 top-0 h-full transition-all duration-200"
+            style={{
+              width: `${scrollProgress}%`,
+              background: "linear-gradient(90deg, hsl(45,85%,50%), hsl(48,90%,68%))",
+              boxShadow: scrollProgress > 0 ? "0 0 8px hsla(45,85%,58%,0.6)" : "none",
+            }}
+          />
+          {scrollProgress > 0 && scrollProgress < 100 && (
+            <div
+              className="absolute top-1/2 -translate-y-1/2 text-xs font-body font-semibold px-2 py-0.5 rounded-full transition-all duration-200"
+              style={{
+                left: `clamp(0px, calc(${scrollProgress}% - 20px), calc(100% - 44px))`,
+                background: "hsl(45,85%,50%)",
+                color: "hsl(230,35%,7%)",
+              }}
+            >
+              {scrollProgress}%
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Текст */}
-      <div className="max-w-2xl mx-auto px-6 pb-20">
+      {/* Прокручиваемый контент */}
+      <div className="flex-1 overflow-y-auto scroll-area-inner" onScroll={handleScroll}>
+        {/* Обложка */}
+        <div className="relative h-56 sm:h-72 overflow-hidden flex-shrink-0">
+          <img src={story.img} alt={story.title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, transparent 30%, hsl(230,35%,7%) 100%)" }} />
+          <div className="absolute bottom-6 left-6 right-6">
+            <div className="flex gap-2 flex-wrap">
+              {[story.category, story.age, `⏱ ${story.readTime}`, `⭐ ${story.rating}`].map(tag => (
+                <span key={tag} className="text-xs px-3 py-1 rounded-full"
+                  style={{ background: "hsla(45,85%,58%,0.15)", color: "hsl(45,80%,78%)" }}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Текст */}
+        <div className="max-w-2xl mx-auto px-6 pb-20">
         <div className="mb-8 pt-2">
           <h1 className="font-fairy text-3xl sm:text-4xl font-bold mb-2 leading-tight" style={{ color: "hsl(48,90%,78%)" }}>
             {story.emoji} {story.title}
@@ -770,6 +807,7 @@ function ReadingPage({
             </button>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
